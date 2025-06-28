@@ -1,0 +1,6 @@
+# distribution
+*.egg-info
+**/__pycache__
+
+# hydra
+.hydra/
