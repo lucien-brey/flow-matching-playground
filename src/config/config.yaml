@@ -1,0 +1,9 @@
+# default structure for hydra config
+defaults:
+  - _self_
+  - override hydra/hydra_logging: disabled
+  - override hydra/jon_logging: disabled
+
+hydra:
+  run:
+    dir: .
