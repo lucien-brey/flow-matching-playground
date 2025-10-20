@@ -4,3 +4,9 @@
 
 # hydra
 .hydra/
+
+# mnist data
+data/
+
+# checkpoints
+checkpoints/
