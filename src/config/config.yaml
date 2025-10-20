@@ -1,9 +1,42 @@
 # default structure for hydra config
-defaults:
-  - _self_
-  - override hydra/hydra_logging: disabled
-  - override hydra/jon_logging: disabled
+defaults:  
+  - _self_  
+  - override hydra/hydra_logging: disabled  
+  - override hydra/job_logging: disabled  
 
 hydra:
   run:
     dir: .
+
+experiment: 
+  mode: training
+  model_type: flow_matching
+  model_name: unet
+  checkpoint_path: "checkpoints"
+  save_checkpoints: true
+  model_ckpt: null
+  seed: 10
+  epoch_save_interval: 1000
+  dataset: mnist
+
+models:
+  device: mps
+  generative_models:
+    flow_matching:
+      sigma: 0.0
+      simple: 
+        channels: 1024
+        layers: 5
+        channels_t: 1024
+        channels_data: 784 # mnist
+      unet:
+        dim: [1, 28, 28] # C, H, W
+        num_channels: 32
+        num_res_blocks: 1
+
+optimizer:
+  lr: 1e-5
+  weight_decay: 1e-5
+
+trainer:
+  batch_size: 100

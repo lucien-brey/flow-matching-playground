@@ -10,7 +10,12 @@ dependencies = [
   "numpy==2.3.2",
   "scipy==1.16.0",
   "hydra-core",
-  "pre-commit"
+  "pre-commit",
+  "tqdm>=4.67.1",
+  "tensorboard>=2.20.0",
+  "torchvision>=0.22.0",
+  "pot>=0.9.6.post1",
+  "torchcfm>=1.0.7",
 ]
 
 [tool.pdm]

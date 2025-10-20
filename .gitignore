@@ -4,3 +4,12 @@
 
 # hydra
 .hydra/
+
+# mnist data
+data/
+
+# checkpoints
+checkpoints/
+
+# runs tensorboard
+runs/

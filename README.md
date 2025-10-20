@@ -21,3 +21,21 @@ Make sure to install (pre-commit)[https://pre-commit.com] before committing to t
 ```bash
 pre-commit install
 ```
+
+## Train the flow matching on the MNIST data
+You can train the flow model with the following 
+
+```bash
+python src/__main__ experiment.mode=training
+```
+
+While it is running, you can investigate the advance thanks to TensorBoard with 
+```bash 
+tensorboard --logdir runs/experiment_<date_of_the_run>
+```
+
+## Samples
+
+Here are some samples generated during the training.
+
+![Sample from MNIST](assets/samples.png)
