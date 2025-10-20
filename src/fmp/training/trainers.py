@@ -2,10 +2,10 @@ from abc import ABC, abstractmethod
 
 import torch
 import torch.nn.functional as F
-from models.generative_models.flow_matching.flow_matching import FlowMatching
-from models.generative_models.vae import VAEAdapter
 from torchcfm.optimal_transport import OTPlanSampler
-from training.logger import writer
+
+from fmp.models.flow_matching.flow_matching import FlowMatching
+from fmp.training.logger import writer
 
 VAE_BETA = 0.0001
 
@@ -28,7 +28,7 @@ class BaseTrainer(ABC):
 
 
 class TrainerVAE(BaseTrainer):
-    def __init__(self, model: VAEAdapter, vae_beta: float = VAE_BETA, device: str = "cpu"):
+    def __init__(self, model, vae_beta: float = VAE_BETA, device: str = "cpu"):
         super().__init__(model=model, device=device)
         self.vae_beta = vae_beta
 

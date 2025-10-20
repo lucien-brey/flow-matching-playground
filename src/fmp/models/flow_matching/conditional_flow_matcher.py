@@ -8,7 +8,8 @@
 from typing import Union
 
 import torch
-from models.generative_models.flow_matching.optimal_transport import OTPlanSampler
+
+from fmp.models.flow_matching.optimal_transport import OTPlanSampler
 
 
 def pad_t_like_x(t, x):

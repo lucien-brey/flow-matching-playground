@@ -30,7 +30,10 @@ def main(config):
             optimizer_kwargs=config.optimizer,
             model_ckpt=config.experiment.model_ckpt,
             epoch_save_interval=config.experiment.epoch_save_interval,
-            method_embeddings=config.experiment.transform_method,
             dataset=config.experiment.dataset,
             device=config.models.device,
         )
+
+
+if __name__ == "__main__":
+    main()

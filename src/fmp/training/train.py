@@ -20,7 +20,6 @@ def train(
 ):
     train_loader = get_dataloader(batch_size=trainer_kwargs.get("batch_size", 32), dataset_name=dataset)
     trainer = load_trainer(
-        path="./src/models/smi_ted/inference/smi_ted_light",
         model_type=model_type,
         model_name=model_name,
         model_kwargs=model_kwargs,

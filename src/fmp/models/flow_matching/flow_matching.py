@@ -1,17 +1,14 @@
 import torch
-from models.generative_models.flow_matching import SimpleFlowMatching, TransformerFlowMatching, UNetFlowMatching
-from models.generative_models.flow_matching.conditional_flow_matcher import ExactOptimalTransportConditionalFlowMatcher
-from models.smi_ted.wrapper_smited import SMITED
 from torch import nn
+
+from fmp.models.flow_matching import SimpleFlowMatching, TransformerFlowMatching, UNetFlowMatching
+from fmp.models.flow_matching.conditional_flow_matcher import ExactOptimalTransportConditionalFlowMatcher
 
 
 class FlowMatching(nn.Module):
-    def __init__(
-        self, model: SimpleFlowMatching | UNetFlowMatching | TransformerFlowMatching, smi_ted: SMITED, sigma: float
-    ):
+    def __init__(self, model: SimpleFlowMatching | UNetFlowMatching | TransformerFlowMatching, sigma: float):
         super().__init__()
         self.model = model
-        self.smi_ted = smi_ted
         self.flow_matching = ExactOptimalTransportConditionalFlowMatcher(sigma=sigma)
 
     def forward(self, xt: torch.Tensor, t: torch.Tensor) -> torch.Tensor:

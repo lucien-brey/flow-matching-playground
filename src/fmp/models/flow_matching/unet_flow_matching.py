@@ -1,6 +1,7 @@
 import torch
-from models.unet import UNetModel
 from torch import nn
+
+from fmp.models.unet import UNetModel
 
 
 class UNetFlowMatching(nn.Module):

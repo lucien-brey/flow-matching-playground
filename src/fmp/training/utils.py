@@ -3,14 +3,17 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
-from data import load_dataset
-from enums import FlowMatchingTypes, GenerativeModels
-from models import SMITED
-from models.generative_models.flow_matching import SimpleFlowMatching, TransformerFlowMatching, UNetFlowMatching
-from models.generative_models.flow_matching.flow_matching import FlowMatching
-from models.generative_models.vae import Decoder, Encoder, VAEAdapter
 from torch.utils.data import DataLoader, Dataset, IterableDataset
-from training.trainers import TrainerSimpleFlowMatching, TrainerTransformerFlowMatching, TrainerUNetFlowMatching, TrainerVAE
+
+from fmp.data import load_dataset
+from fmp.enums import FlowMatchingTypes, GenerativeModels
+from fmp.models.flow_matching import SimpleFlowMatching, TransformerFlowMatching, UNetFlowMatching
+from fmp.models.flow_matching.flow_matching import FlowMatching
+from fmp.training.trainers import (
+    TrainerSimpleFlowMatching,
+    TrainerTransformerFlowMatching,
+    TrainerUNetFlowMatching,
+)
 
 HIDDEN_DIM = 768
 INPUT_DIM = 768
@@ -26,22 +29,7 @@ def get_dataloader(dataset_name: str, batch_size: int = 32):
         raise ValueError(f"Dataset {dataset_name} is not a valid dataset")
 
 
-def load_vae(path: str, model_kwargs: dict, vae_beta: float, model_ckpt: str = None, device: str = "cpu"):
-    smi_ted = SMITED(path=path)  # TODO: remove this
-    input_dim = model_kwargs.get("input_dim", INPUT_DIM)
-    hidden_dim = model_kwargs.get("hidden_dim", HIDDEN_DIM)
-    encoder = Encoder(input_dim=input_dim, hidden_dim=hidden_dim)
-    decoder = Decoder(hidden_dim=hidden_dim, output_dim=input_dim)
-    model = VAEAdapter(smi_ted=smi_ted, encoder=encoder, decoder=decoder)
-
-    trainer = TrainerVAE(model=model, vae_beta=vae_beta, device=device)
-    if model_ckpt is not None:
-        trainer.load_checkpoint(model_ckpt=model_ckpt)
-    return model
-
-
-def load_flow_matching(model_name: str, path: str, model_kwargs: dict, model_ckpt: str = None, device: str = "cpu"):
-    smi_ted = SMITED(path=path)
+def load_flow_matching(model_name: str, model_kwargs: dict, model_ckpt: str = None, device: str = "cpu"):
     if model_name == FlowMatchingTypes.SIMPLE.value:
         # model = MLP_2(
         #     channels_data=model_kwargs.get("channels_data"),  # input x dim
@@ -54,7 +42,7 @@ def load_flow_matching(model_name: str, path: str, model_kwargs: dict, model_ckp
             w=model_kwargs.get("channels"),
             time_varying=True,
         )
-        model = FlowMatching(model=model, smi_ted=smi_ted, sigma=model_kwargs.get("sigma"))
+        model = FlowMatching(model=model, sigma=model_kwargs.get("sigma"))
         trainer = TrainerSimpleFlowMatching(model=model, device=device)
     elif model_name == FlowMatchingTypes.UNET.value:
         model = UNetFlowMatching(
@@ -62,13 +50,13 @@ def load_flow_matching(model_name: str, path: str, model_kwargs: dict, model_ckp
             num_channels=model_kwargs[model_name].get("num_channels"),
             num_res_blocks=model_kwargs[model_name].get("num_res_blocks"),
         )
-        model = FlowMatching(model=model, smi_ted=smi_ted, sigma=model_kwargs.get("sigma"))
+        model = FlowMatching(model=model, sigma=model_kwargs.get("sigma"))
         trainer = TrainerUNetFlowMatching(model=model, device=device)
     elif model_name == FlowMatchingTypes.TRANSFORMER.value:
         model = TransformerFlowMatching(
             params=model_kwargs[model_name].get("params"), num_layers=model_kwargs[model_name].get("num_layers")
         )
-        model = FlowMatching(model=model, smi_ted=smi_ted, sigma=model_kwargs.get("sigma"))
+        model = FlowMatching(model=model, sigma=model_kwargs.get("sigma"))
         trainer = TrainerTransformerFlowMatching(model=model, device=device)
 
     if model_ckpt is not None:
@@ -79,24 +67,14 @@ def load_flow_matching(model_name: str, path: str, model_kwargs: dict, model_ckp
 def load_trainer(
     model_type: str,
     model_name: str,
-    path: str,
     model_kwargs: dict,
     trainer_kwargs,
     model_ckpt: str = None,
     device: str = "cpu",
 ):
-    if model_type == GenerativeModels.VAE.value:
-        return load_vae(
-            path=path,
-            model_kwargs=model_kwargs[model_type],
-            vae_beta=trainer_kwargs.get("vae_beta"),
-            model_ckpt=model_ckpt,
-            device=device,
-        )
-
-    elif model_type == GenerativeModels.FLOW_MATCHING.value:
+    if model_type == GenerativeModels.FLOW_MATCHING.value:
         return load_flow_matching(
-            model_name=model_name, path=path, model_kwargs=model_kwargs[model_type], model_ckpt=model_ckpt, device=device
+            model_name=model_name, model_kwargs=model_kwargs[model_type], model_ckpt=model_ckpt, device=device
         )
 
 

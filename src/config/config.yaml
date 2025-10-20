@@ -1,8 +1,8 @@
 # default structure for hydra config
-defaults:
-  - _self_
-  - override hydra/hydra_logging: disabled
-  - override hydra/jon_logging: disabled
+defaults:  
+  - _self_  
+  - override hydra/hydra_logging: disabled  
+  - override hydra/job_logging: disabled  
 
 hydra:
   run:
@@ -38,3 +38,5 @@ optimizer:
   lr: 1e-5
   weight_decay: 1e-5
 
+trainer:
+  batch_size: 100
