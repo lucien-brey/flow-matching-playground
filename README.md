@@ -2,7 +2,7 @@
 
 ## Installation 
 
-Make sure you have (uv)[https://docs.astral.sh/uv/getting-started/installation/] installed, then run
+Make sure you have [uv](https://docs.astral.sh/uv/getting-started/installation/) installed, then run
 
 ```bash
 uv venv --python 3.13
@@ -16,7 +16,7 @@ uv pip install -e .
 ```
 
 ## Committing to this repo
-Make sure to install (pre-commit)[https://pre-commit.com] before committing to this repo by running
+Make sure to install [pre-commit](https://pre-commit.com) before committing to this repo by running
 
 ```bash
 pre-commit install
